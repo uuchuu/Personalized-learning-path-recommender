@@ -1,17 +1,11 @@
 from collections import defaultdict, deque
+from algorithm.graph_builder import build_graph
 
 def recommend_learning_path(courses, prerequisites, learned_courses):
-    """
-    courses: dict {course_id: course_name}
-    prerequisites: list of (course_id, pre_course_id)
-    learned_courses: set of course_id
-    """
-
-    graph = defaultdict(list)
+    graph = build_graph(prerequisites)
     indegree = defaultdict(int)
 
     for course, pre in prerequisites:
-        graph[pre].append(course)
         indegree[course] += 1
 
     queue = deque()
