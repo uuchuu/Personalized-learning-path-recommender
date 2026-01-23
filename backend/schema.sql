@@ -1,23 +1,43 @@
-CREATE TABLE majors (
-    major_id INT PRIMARY KEY,
-    major_name VARCHAR(50)
+-- Student table
+CREATE TABLE IF NOT EXISTS student (
+    student_id INTEGER PRIMARY KEY,
+    level INTEGER,
+    target TEXT
 );
--- 专业表
-CREATE TABLE courses (
-    course_id INT PRIMARY KEY,
-    course_name VARCHAR(100),
-    major_id INT,
-    difficulty INT,
-    course_type VARCHAR(50),
-    credit FLOAT,
-    FOREIGN KEY (major_id) REFERENCES majors(major_id)
+
+-- Course table
+CREATE TABLE IF NOT EXISTS course (
+    course_id INTEGER PRIMARY KEY,
+    course_name TEXT,
+    difficulty INTEGER
 );
--- 课程细节
-CREATE TABLE course_prerequisite (
-    id INT PRIMARY KEY,
-    course_id INT,
-    prereq_course_id INT,
-    FOREIGN KEY (course_id) REFERENCES courses(course_id),
-    FOREIGN KEY (prereq_course_id) REFERENCES courses(course_id)
+
+-- Prerequisite relationship (DAG)
+CREATE TABLE IF NOT EXISTS prerequisite (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id INTEGER,
+    pre_course_id INTEGER,
+    FOREIGN KEY(course_id) REFERENCES course(course_id),
+    FOREIGN KEY(pre_course_id) REFERENCES course(course_id)
 );
--- 先修关系
+
+-- Student learning record
+CREATE TABLE IF NOT EXISTS student_course (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER,
+    course_id INTEGER,
+    status TEXT,
+    score INTEGER,
+    FOREIGN KEY(student_id) REFERENCES student(student_id),
+    FOREIGN KEY(course_id) REFERENCES course(course_id)
+);
+
+-- Learning resources
+CREATE TABLE IF NOT EXISTS resource (
+    resource_id INTEGER PRIMARY KEY,
+    course_id INTEGER,
+    resource_type TEXT,
+    url TEXT,
+    difficulty INTEGER,
+    FOREIGN KEY(course_id) REFERENCES course(course_id)
+);
