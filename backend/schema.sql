@@ -1,19 +1,21 @@
--- Student table
-CREATE TABLE IF NOT EXISTS student (
+-- 学生表
+CREATE TABLE student (
     student_id INTEGER PRIMARY KEY,
+    name TEXT,
     level INTEGER,
     target TEXT
 );
 
--- Course table
-CREATE TABLE IF NOT EXISTS course (
+-- 课程表
+CREATE TABLE course (
     course_id INTEGER PRIMARY KEY,
     course_name TEXT,
-    difficulty INTEGER
+    difficulty INTEGER,
+    credit INTEGER
 );
 
--- Prerequisite relationship (DAG)
-CREATE TABLE IF NOT EXISTS prerequisite (
+-- 课程先修关系表（有向图）
+CREATE TABLE prerequisite (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     course_id INTEGER,
     pre_course_id INTEGER,
@@ -21,22 +23,23 @@ CREATE TABLE IF NOT EXISTS prerequisite (
     FOREIGN KEY(pre_course_id) REFERENCES course(course_id)
 );
 
--- Student learning record
-CREATE TABLE IF NOT EXISTS student_course (
+-- 学生已修课程表
+CREATE TABLE student_course (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id INTEGER,
     course_id INTEGER,
     status TEXT,
-    score INTEGER,
+    score REAL,
     FOREIGN KEY(student_id) REFERENCES student(student_id),
     FOREIGN KEY(course_id) REFERENCES course(course_id)
 );
 
--- Learning resources
-CREATE TABLE IF NOT EXISTS resource (
+-- 学习资源表
+CREATE TABLE resource (
     resource_id INTEGER PRIMARY KEY,
     course_id INTEGER,
-    resource_type TEXT,
+    type TEXT,
+    title TEXT,
     url TEXT,
     difficulty INTEGER,
     FOREIGN KEY(course_id) REFERENCES course(course_id)
